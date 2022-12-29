@@ -9,3 +9,7 @@ def test_babysitter_init():
     assert testSitter.mid_to_finish_pay == 16
     assert testSitter.bed_time == 10
 
+def test_wrong_start_time():
+    testSitter = Babysitter()
+    assert testSitter.set_start('4pm')
+
