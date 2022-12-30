@@ -192,12 +192,12 @@ class Babysitter:
 
     ##
     # Sets the bed time for the babysitter/kids:
-    #   
-    #
+    #   To allow for at least one hour of work when setting the bed time I   
+    #   set the limits for choosing a bed time to be between 6PM and 3AM.
     #
     # Notes:
-    #   
-    #   
+    #   Not sure if this was required but I was not given this info so I added it
+    #   as an input.
     #
     #   
     ##
@@ -205,6 +205,12 @@ class Babysitter:
         time = self.convert_time(new_bed_time)
         if time['error'] != None:
             return time['error']
+
+        else:
+            if 17 >= time['hour'] >= 2:
+                return string_constants.INVALID_BED_TIME_ERROR
+            else:
+                self.bed_time = time['hour']
 
     ##
     # Calculates the amount to charge for the babysitting:
