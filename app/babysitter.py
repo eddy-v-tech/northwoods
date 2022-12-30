@@ -27,7 +27,7 @@ class Babysitter:
         self.bed_time = init_bed_time
     
     ##
-    # Converts the inputs that the program takes to be used later by the methods
+    # Converts the inputs that the program takes to be used later by the set methods
     #
     # Notes:
     #   I know the objective is to show TDD and this time conversion might be overkill for the project
@@ -64,7 +64,7 @@ class Babysitter:
 
             hour = timeString.split(':')[0].replace(" ", "")
             if len(hour) > 2 or len(hour) < 1 or not hour.isnumeric() or int(hour) > 12:
-                returnInfo['error'] = string_constants.INVALID_TIME_FORMAT
+                returnInfo['error'] = string_constants.INVALID_TIME_FORMAT_ERROR
                 return returnInfo
             else:
                 hour = int(hour)
@@ -74,7 +74,7 @@ class Babysitter:
 
             minutes = timeString.split(':')[1][:-2].replace(" ", "")
             if len(minutes) != 2 or not minutes.isnumeric() or int(minutes) >= 60:
-                returnInfo['error'] = string_constants.INVALID_TIME_FORMAT
+                returnInfo['error'] = string_constants.INVALID_TIME_FORMAT_ERROR
                 return returnInfo
             else:
                 minutes = int(minutes)
@@ -86,7 +86,7 @@ class Babysitter:
         else:
             hour = timeString[:-2]
             if len(hour) > 2 or len(hour) < 1 or not hour.isnumeric() or int(hour) > 12:
-                returnInfo['error'] = string_constants.INVALID_TIME_FORMAT
+                returnInfo['error'] = string_constants.INVALID_TIME_FORMAT_ERROR
                 return returnInfo
             else:
                 hour = int(hour)
@@ -135,7 +135,6 @@ class Babysitter:
 
             elif time['minutes'] != None and time['minutes'] > 0:
                 self.start = time['hour'] + 1
-                print(self.start)
                 print(string_constants.MINUTES_AFTER_WARNING)
                 
             elif time['hour'] < 17:
@@ -146,23 +145,50 @@ class Babysitter:
             
         return string_constants.SUCCESS_STRING
 
-
-            
-
-
     ##
     # Sets the finish time for the babysitter:
-    #   
+    #   The babysitter stops getting paid at 4AM and must leave by then.
     #
+    #   Have to check and make sure a time before the start is not entered.
+    #
+    #   The conversion of time has to be checked as 5PM (17:00) is earlier than 3AM (3:00)
     #
     # Notes:
-    #   
-    #   
+    #   I left some of the constraints open to be changed later such as how strict that 5AM 
+    #   must-leave-by time as I can see how some assumptions I've made could be misinterpretations
+    #   of the requirements
     #
-    #   
     ##
     def set_finish(self, new_finish_time):
-        return False
+        time = self.convert_time(new_finish_time)
+        if time['error'] != None:
+            return time['error']
+        
+        else:
+            if (16 >= time['hour'] >= 5):
+                return string_constants.FINISH_TIME_AFTER_FIVE_AM_ERROR
+
+            elif time['minutes'] != None and time['minutes'] > 0:
+                temp_finish = time['hour'] - 1
+                if temp_finish >= 17 and self.start >= 16 and self.start > temp_finish:
+                    return string_constants.FINISH_TIME_BEFORE_START_ERROR
+                elif temp_finish <= 4 and self.start <= 4 and temp_finish < self.start:
+                    return string_constants.FINISH_TIME_BEFORE_START_ERROR
+
+                else:
+                    self.finish = temp_finish
+                print(string_constants.MINUTES_AFTER_WARNING)
+            
+            else:
+                if time['hour'] >= 17 and self.start >= 16 and self.start > time['hour']:
+                    return string_constants.FINISH_TIME_BEFORE_START_ERROR
+                elif time['hour'] <= 4 and self.start <= 4 and time['hour'] < self.start:
+                    return string_constants.FINISH_TIME_BEFORE_START_ERROR
+                else:
+                    self.finish = time['hour']
+                
+            
+        return string_constants.SUCCESS_STRING
 
     ##
     # Sets the bed time for the babysitter/kids:
@@ -176,7 +202,9 @@ class Babysitter:
     #   
     ##
     def set_bed_time(self, new_bed_time):
-        return False
+        time = self.convert_time(new_bed_time)
+        if time['error'] != None:
+            return time['error']
 
     ##
     # Calculates the amount to charge for the babysitting:

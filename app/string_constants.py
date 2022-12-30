@@ -13,7 +13,8 @@ NO_FINISH_TIME_SET_ERROR = 'No finish time has been set to calculate charge'
 
 ## Warnings/Heads Up
 MINUTES_AFTER_WARNING = 'Only full hours get paid there for your start time will be \
-                    updated to the next hour'
+                    updated to the appropriate hour (hour later for start and hour prior \
+                    for finish)'
 
 ## Success
 SUCCESS_STRING = 'Success'
