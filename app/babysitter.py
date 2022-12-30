@@ -214,7 +214,7 @@ class Babysitter:
 
     ##
     # Calculates the amount to charge for the babysitting:
-    #   
+    #   Will make sure that all the parameters are set before returning a calculation
     #
     #
     # Notes:
