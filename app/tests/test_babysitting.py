@@ -1,4 +1,5 @@
 from babysitter import Babysitter
+import string_constants
 
 def test_babysitter_init():
     testSitter = Babysitter()
@@ -9,14 +10,20 @@ def test_babysitter_init():
     assert testSitter.mid_to_finish_pay == 16
     assert testSitter.bed_time == 10
 
-def test_invalid_start_time():
+def test_invalid_start_times():
     testSitter = Babysitter()
-    assert testSitter.set_start('4pm')
+
+    # Empty inputs are not allowed for start times
+    assert testSitter.set_start('') == string_constants.EMPTY_INPUT_ERROR
+    # Test that AM or PM is used for time
+    assert testSitter.set_start('5:00') == string_constants.MISSING_ENDING_ERROR
+    # Empty inputs are not allowed for start times
+    assert testSitter.set_start('67PM') == string_constants.INVALID_TIME_FORMAT
+    # Empty inputs are not allowed for start times
+    assert testSitter.set_start('5AM') == string_constants.INVALID_START_TIME_ERROR
 
 def test_invalid_finish_time():
-    testSitter = Babysitter()
-    assert testSitter.set_finish('4pm')
+    pass
 
 def test_invalid_bed_time():
-    testSitter = Babysitter()
-    assert testSitter.set_bed_time('4pm')
+    pass
