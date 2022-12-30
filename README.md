@@ -9,13 +9,15 @@ Below you will find the requirements to run the python program as well as the te
 This program was written using python 3.9 so any other version is not guarenteed to work. (Probably would though)
 
 Required installs:
-    - pytest
+1. Run to be able to run tests
     ```
     pip install pytest
     ```
+
 ## Local Usage
 
-To run the program navigate to the /app directory and use the following command as an example
+To run the program navigate to the /app directory and use the following command as an example -s is for start and -f is for finish
+1. Run
     ```
     python babysitting_calc_app.py -s 5:00PM -f 12:00AM
     ```
@@ -23,8 +25,10 @@ To run the program navigate to the /app directory and use the following command 
 This will give you a calculation of a nightly charge between 5PM and 12AM (the default bedtime is set to 10PM, but you can change this with the optional -b agrument)
 
 To get help with any issues on running the command use the command below for guidance
+1. Run
     ```
     python babysitting_calc_app.py -h
+    ```
 
 ## Requirements to run with docker
 
