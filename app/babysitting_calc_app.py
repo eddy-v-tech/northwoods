@@ -3,8 +3,8 @@ import logging
 import argparse
 
 argParser = argparse.ArgumentParser()
-argParser.add_argument("-s", "--start", required=True, help="Start times accepted in the following two formats: 5PM or 5:00PM")
-argParser.add_argument("-f", "--finish", required=True, help="Finish times accepted in the following two formats: 5PM or 5:00PM")
+argParser.add_argument("-s", "--start", help="Start times accepted in the following two formats: 5PM or 5:00PM")
+argParser.add_argument("-f", "--finish", help="Finish times accepted in the following two formats: 5PM or 5:00PM")
 argParser.add_argument("-b", "--bedtime", help="bed times accepted in the following two formats: 5PM or 5:00PM")
 
 args = argParser.parse_args()
