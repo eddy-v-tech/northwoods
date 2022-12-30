@@ -73,18 +73,19 @@ def test_invalid_finish_time():
     assert testSitter.set_finish("6AM") == string_constants.FINISH_TIME_AFTER_FIVE_AM_ERROR
 
     # Test catching finish times before start times
-    testSitter.set_start("5PM")
-    assert testSitter.set_finish("4PM") == string_constants.FINISH_TIME_BEFORE_START_ERROR
+    testSitter.set_start("8PM")
+    assert testSitter.set_finish("7PM") == string_constants.FINISH_TIME_BEFORE_START_ERROR
 
 def test_valid_finish_time():
     testSitter = Babysitter()
 
     # Test a 3AM finish which is within range
+    testSitter.set_start("6PM")
     assert testSitter.set_finish("3AM") == string_constants.SUCCESS_STRING
 
     # Test finishing a full night from both bounds
     testSitter.set_start("5PM")
-    assert testSitter.set_finish("4AM") == string_constants.FINISH_TIME_BEFORE_START_ERROR
+    assert testSitter.set_finish("4AM") == string_constants.SUCCESS_STRING
 
 
 def test_invalid_bed_time():
