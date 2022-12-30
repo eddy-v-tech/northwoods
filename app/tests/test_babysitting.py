@@ -92,7 +92,7 @@ def test_invalid_bed_time():
     testSitter = Babysitter()
 
     # Bed times after midnight are not allowed (could be changed in the future)
-    assert testSitter.set_bed_time("3AM") == string_constants.INVALID_BED_TIME_ERROR
+    assert testSitter.set_bed_time("4AM") == string_constants.INVALID_BED_TIME_ERROR
 
     # Bed times before 6 are not allowed (could be changed but before 6 would be at the 5 start time)
     assert testSitter.set_bed_time("4PM") == string_constants.INVALID_BED_TIME_ERROR
