@@ -75,6 +75,7 @@ The actions above can lead to a bunch of containers being made if ran many times
 Testing is set up to happen automatically when pushing to github on any branch in the repo. You can see the test results per push by going to "Actions" next to "Pull Requests" at the top of this repo.
 
 To test locally you just have to navigate to the /app directory and run (the v is to make it more verbose)
+1. Run
     ```
     pytest -v
     ```
