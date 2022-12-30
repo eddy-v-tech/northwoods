@@ -18,9 +18,9 @@ class Babysitter:
     #   In case the rates could also some day change I have used the ones given as a default.
     ##
 
-    def __init__(self, first_init_pay = 12, second_init_pay = 8, third_init_pay = 16, init_bed_time = 10):
-        self.start = 0
-        self.finish = 0
+    def __init__(self, first_init_pay = 12, second_init_pay = 8, third_init_pay = 16, init_bed_time = 22):
+        self.start = None
+        self.finish = None
         self.start_to_bed_pay = first_init_pay
         self.bed_to_mid_pay = second_init_pay
         self.mid_to_finish_pay = third_init_pay
@@ -135,6 +135,7 @@ class Babysitter:
 
             elif time['minutes'] != None and time['minutes'] > 0:
                 self.start = time['hour'] + 1
+                print(self.start)
                 print(string_constants.MINUTES_AFTER_WARNING)
                 
             elif time['hour'] < 17:
@@ -150,7 +151,7 @@ class Babysitter:
 
 
     ##
-    # Sets the start time for the babysitter:
+    # Sets the finish time for the babysitter:
     #   
     #
     #
@@ -164,7 +165,7 @@ class Babysitter:
         return False
 
     ##
-    # Sets the start time for the babysitter:
+    # Sets the bed time for the babysitter/kids:
     #   
     #
     #
@@ -178,7 +179,7 @@ class Babysitter:
         return False
 
     ##
-    # Sets the start time for the babysitter:
+    # Calculates the amount to charge for the babysitting:
     #   
     #
     #
