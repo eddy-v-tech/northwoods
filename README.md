@@ -74,6 +74,8 @@ The actions above can lead to a bunch of containers being made if ran many times
 
 Testing is set up to happen automatically when pushing to github on any branch in the repo. You can see the test results per push by going to "Actions" next to "Pull Requests" at the top of this repo.
 
+All tests that were created for this program can be found undert the app/tests directory in the test_babysitting.py file 
+
 To test locally you just have to navigate to the /app directory and run (the v is to make it more verbose)
 1. Run
     ```
@@ -81,3 +83,8 @@ To test locally you just have to navigate to the /app directory and run (the v i
     ```
 
 I did not have time to configure the docker portion to run the tests, but with a little more time that could get added as well.
+
+## Final Notes
+
+I want to thank you again for giving me the extra time to complete the kota, as the holidays were tough to juggle with family around and still having a lot to do in my current role. I know I might have gone a little overboard in some regards to this challenge, but I hope it shows that I am a hard worker. There are many places I think I can still improve this, but for now if you have any questions feel free to reach out! 
+
