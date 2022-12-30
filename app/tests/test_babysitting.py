@@ -22,6 +22,21 @@ def test_invalid_start_times():
     # Empty inputs are not allowed for start times
     assert testSitter.set_start('5AM') == string_constants.INVALID_START_TIME_ERROR
 
+def test_valid_start_times():
+    testSitter = Babysitter()
+
+    # Test a 6PM start time (18 when converted to 24 hour format)
+    assert testSitter.set_start("6:00PM") == string_constants.SUCCESS_STRING
+    assert testSitter.start == 18
+
+    # Test a 4PM start time (should auto set to 17 since that is the earliest start)
+    assert testSitter.set_start("4PM") == string_constants.SUCCESS_STRING
+    assert testSitter.start == 17
+
+    # Test a 6:30 start time to test that fractional times don't count (should be 20)
+    assert testSitter.set_start("6:30PM") == string_constants.SUCCESS_STRING
+    assert testSitter.start == 20
+
 def test_invalid_finish_time():
     pass
 

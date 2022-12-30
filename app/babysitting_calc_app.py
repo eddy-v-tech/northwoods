@@ -3,4 +3,5 @@ import logging
 
 sitter = Babysitter()
 
-print(sitter.set_start('67PM'))
+print(sitter.set_start('6PM'))
+print(sitter.start)

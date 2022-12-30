@@ -73,7 +73,7 @@ class Babysitter:
                 
 
             minutes = timeString.split(':')[1][:-2].replace(" ", "")
-            if len(minutes) != 2 or not minutes.isnumeric():
+            if len(minutes) != 2 or not minutes.isnumeric() or int(minutes) >= 60:
                 returnInfo['error'] = string_constants.INVALID_TIME_FORMAT
                 return returnInfo
             else:
@@ -90,6 +90,8 @@ class Babysitter:
                 return returnInfo
             else:
                 hour = int(hour)
+                if ending == 'PM':
+                    hour += 12
 
             returnInfo['hour'] = hour
             returnInfo['ending'] = ending
@@ -130,6 +132,19 @@ class Babysitter:
         else:
             if (6 >= time['hour'] >= 4):
                 return string_constants.INVALID_START_TIME_ERROR
+
+            elif time['minutes'] != None and time['minutes'] > 0:
+                self.start = time['hour'] + 1
+                print(string_constants.MINUTES_AFTER_WARNING)
+                
+            elif time['hour'] < 17:
+                self.start = 17
+
+            else:
+                self.start = time['hour']
+            
+        return string_constants.SUCCESS_STRING
+
 
             
 
