@@ -67,7 +67,7 @@ def test_valid_start_time():
 
     # Test a 4PM start time (should auto set to 17 since that is the earliest start)
     assert testSitter.set_start("4PM") == string_constants.SUCCESS_STRING
-    assert testSitter.start == 17
+    assert testSitter.start == 16
 
     # Test a 6:30 start time to test that fractional times don't count (should be 19)
     assert testSitter.set_start("6:30PM") == string_constants.SUCCESS_STRING
@@ -157,7 +157,15 @@ def test_calculation():
     testSitter.set_finish("3AM")
     assert testSitter.calculate_nightly_charge() == 32
 
+def test_edge_case():
+    testSitter = Babysitter()
 
-# Might have to come back to this one since I took care of some of what I thought would be edge cases already
-# def test_edge_case():
-#     pass
+    # Test a 2 hour shift that starts at midnight 00:00 time (16*2=32)
+    testSitter.set_start("12AM")
+    testSitter.set_finish("2AM")
+    assert testSitter.calculate_nightly_charge() == 32
+
+    # Test a 0 hour shift that starts at midnight 00:00 time
+    testSitter.set_start("12AM")
+    testSitter.set_finish("12AM")
+    assert testSitter.calculate_nightly_charge() == 0
