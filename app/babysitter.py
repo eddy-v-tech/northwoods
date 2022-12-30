@@ -46,6 +46,10 @@ class Babysitter:
             'error' : None,
         }
 
+        if type(timeString) != str:
+            returnInfo['error'] = string_constants.INVALID_TYPE_INPUT_ERROR
+            return returnInfo
+
         if len(timeString.replace(" ", "")) == 0:
             returnInfo['error'] = string_constants.EMPTY_INPUT_ERROR
             return returnInfo 
@@ -70,6 +74,8 @@ class Babysitter:
                 hour = int(hour)
                 if ending == 'PM':
                     hour += 12
+                elif ending == 'AM' and hour == 12:
+                    hour = 0
                 
 
             minutes = timeString.split(':')[1][:-2].replace(" ", "")
@@ -92,13 +98,13 @@ class Babysitter:
                 hour = int(hour)
                 if ending == 'PM':
                     hour += 12
+                elif ending == 'AM' and hour == 12:
+                    hour = 0
 
             returnInfo['hour'] = hour
             returnInfo['ending'] = ending
         
         return returnInfo
-
-
 
     ##
     # Sets the start time for the babysitter:
@@ -136,9 +142,6 @@ class Babysitter:
             elif time['minutes'] != None and time['minutes'] > 0:
                 self.start = time['hour'] + 1
                 print(string_constants.MINUTES_AFTER_WARNING)
-                
-            elif time['hour'] < 17:
-                self.start = 17
 
             else:
                 self.start = time['hour']
@@ -186,7 +189,6 @@ class Babysitter:
                     return string_constants.FINISH_TIME_BEFORE_START_ERROR
                 else:
                     self.finish = time['hour']
-                
             
         return string_constants.SUCCESS_STRING
 
@@ -224,4 +226,54 @@ class Babysitter:
     #   
     ##
     def calculate_nightly_charge(self):
-        return False
+        if self.start == None:
+            return string_constants.NO_START_TIME_SET_ERROR
+        
+        elif self.finish == None:
+            return string_constants.NO_START_TIME_SET_ERROR
+        
+        elif self.bed_time == None:
+            return string_constants.NO_START_TIME_SET_ERROR
+
+        else:
+            firstRateHours = 0
+            secondRateHours = 0
+            thirdRateHours = 0
+            totalHours = 0
+
+            # Calculating the total hours worked for the night
+            if self.start >= 17:
+                if self.finish >= 17:
+                    totalHours = self.finish - self.start
+                elif self.finish <= 5:
+                    totalHours = 24-self.start+self.finish
+            else:
+                totalHours = self.finish - self.start
+            
+            # By counting up from the start time and being aware of when the bedtime is
+            # I change the state to count what rate we are working at
+            # States:
+            #   1 - First rate
+            #   2 - Second rate
+            #   3 - Third rate
+            #
+            currState = 1
+            for hour in range(self.start, self.start+totalHours):
+                
+                # Accounting for 
+                if hour >= 24 or (0 <= hour <= 4):
+                    currState = 3
+                elif hour >= self.bed_time < 24:
+                    currState = 2
+
+                if currState == 1:
+                    firstRateHours += 1
+                elif currState == 2:
+                    secondRateHours += 1
+                elif currState == 3:
+                    thirdRateHours += 1
+
+            finalCharge = firstRateHours*self.start_to_bed_pay+secondRateHours*self.bed_to_mid_pay\
+                +thirdRateHours*self.mid_to_finish_pay
+            
+            return finalCharge
