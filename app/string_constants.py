@@ -10,6 +10,7 @@ INVALID_TYPE_INPUT_ERROR = 'Time input was not of type string'
 INVALID_BED_TIME_ERROR = 'Valid bed times are between 7PM and 11PM'
 NO_START_TIME_SET_ERROR = 'No start time has been set to calculate charge'
 NO_FINISH_TIME_SET_ERROR = 'No finish time has been set to calculate charge'
+NO_BED_TIME_SET = 'No bed time is currently set'
 
 ## Warnings/Heads Up
 MINUTES_AFTER_WARNING = 'Only full hours get paid there for your start time will be \

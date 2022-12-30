@@ -25,6 +25,9 @@ def test_invalid_time_input():
     # Non time inputs are not allowed for start times
     assert testSitter.set_start('67PM') == string_constants.INVALID_TIME_FORMAT_ERROR
 
+    # Test that anything that is not a string is not permitted
+    assert testSitter.set_start(67) == string_constants.INVALID_TYPE_INPUT_ERROR
+
     # Empty inputs are not allowed for finish times
     assert testSitter.set_finish('') == string_constants.EMPTY_INPUT_ERROR
 
@@ -33,6 +36,9 @@ def test_invalid_time_input():
 
     # Non time inputs are not allowed for finish times
     assert testSitter.set_finish('67PM') == string_constants.INVALID_TIME_FORMAT_ERROR
+
+    # Test that anything that is not a string is not permitted
+    assert testSitter.set_finish(67) == string_constants.INVALID_TYPE_INPUT_ERROR
 
     # Empty inputs are not allowed for bed times
     assert testSitter.set_bed_time('') == string_constants.EMPTY_INPUT_ERROR
@@ -43,7 +49,8 @@ def test_invalid_time_input():
     # Non time inputs are not allowed for bed times
     assert testSitter.set_bed_time('67PM') == string_constants.INVALID_TIME_FORMAT_ERROR
 
-    # creat a test check for type string input and write code for it
+    # Test that anything that is not a string is not permitted
+    assert testSitter.set_bed_time(67) == string_constants.INVALID_TYPE_INPUT_ERROR
 
 def test_invalid_start_time():
     testSitter = Babysitter()
@@ -111,26 +118,46 @@ def test_valid_bed_time():
 def test_invalid_calculation_scenario():
     testSitter = Babysitter()
 
-    # Test undefined start time
+    # Test undefined start time is handled
+    testSitter.start = None
+    assert testSitter.calculate_nightly_charge() == string_constants.NO_START_TIME_SET_ERROR
 
-    # Test undefined finish time
+    # Test undefined finish time is handled
+    testSitter.finish = None
+    assert testSitter.calculate_nightly_charge() == string_constants.NO_START_TIME_SET_ERROR
 
-    # Test undefined bed time
+    # Test undefined bed time is handled
+    testSitter.bed_time = None
+    assert testSitter.calculate_nightly_charge() == string_constants.NO_START_TIME_SET_ERROR
 
 
 def test_calculation():
     testSitter = Babysitter()
 
-    # Test undefined start time
+    # Test a 1 hour shift before bed time should be $12 (using default bed time of 10PM)
+    testSitter.set_start("5PM")
+    testSitter.set_finish("6PM")
+    assert testSitter.calculate_nightly_charge() == 12
 
-    # Test undefined finish time
 
-    # Test undefined bed time
+    # Test a 7 hour shift that includes all rates (2*12+3*8+2*16 = $80)
+    testSitter.set_start("7PM")
+    testSitter.set_finish("2AM")
+    testSitter.set_bed_time("9PM")
+    assert testSitter.calculate_nightly_charge() == 80
 
-# # 12AM start time?
-# edge bed time
-# edge start time
-# edge finish time
-# # Day light savings?
+    # Test a 2 hour shift that includes just bed time and before midnight (2*8 = 16)
+    testSitter.set_start("9PM")
+    testSitter.set_finish("11PM")
+    testSitter.set_bed_time("9PM")
+    assert testSitter.calculate_nightly_charge() == 16
+
+    # Test a 2 hour shift that includes just after midnight hours (16*2=32)
+    testSitter.set_start("1AM")
+    testSitter.set_finish("3AM")
+    assert testSitter.calculate_nightly_charge() == 32
+
+
+# Might have to come back to this one since I took care of some of what I thought would be edge cases already
 # def test_edge_case():
 #     pass
