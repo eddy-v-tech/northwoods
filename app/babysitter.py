@@ -18,9 +18,9 @@ class Babysitter:
     #   In case the rates could also some day change I have used the ones given as a default.
     ##
 
-    def __init__(self, first_init_pay = 12, second_init_pay = 8, third_init_pay = 16, init_bed_time = 10):
-        self.start = 0
-        self.finish = 0
+    def __init__(self, first_init_pay = 12, second_init_pay = 8, third_init_pay = 16, init_bed_time = 22):
+        self.start = None
+        self.finish = None
         self.start_to_bed_pay = first_init_pay
         self.bed_to_mid_pay = second_init_pay
         self.mid_to_finish_pay = third_init_pay
@@ -73,7 +73,7 @@ class Babysitter:
                 
 
             minutes = timeString.split(':')[1][:-2].replace(" ", "")
-            if len(minutes) != 2 or not minutes.isnumeric():
+            if len(minutes) != 2 or not minutes.isnumeric() or int(minutes) >= 60:
                 returnInfo['error'] = string_constants.INVALID_TIME_FORMAT
                 return returnInfo
             else:
@@ -90,6 +90,8 @@ class Babysitter:
                 return returnInfo
             else:
                 hour = int(hour)
+                if ending == 'PM':
+                    hour += 12
 
             returnInfo['hour'] = hour
             returnInfo['ending'] = ending
@@ -131,11 +133,25 @@ class Babysitter:
             if (6 >= time['hour'] >= 4):
                 return string_constants.INVALID_START_TIME_ERROR
 
+            elif time['minutes'] != None and time['minutes'] > 0:
+                self.start = time['hour'] + 1
+                print(self.start)
+                print(string_constants.MINUTES_AFTER_WARNING)
+                
+            elif time['hour'] < 17:
+                self.start = 17
+
+            else:
+                self.start = time['hour']
+            
+        return string_constants.SUCCESS_STRING
+
+
             
 
 
     ##
-    # Sets the start time for the babysitter:
+    # Sets the finish time for the babysitter:
     #   
     #
     #
@@ -149,7 +165,7 @@ class Babysitter:
         return False
 
     ##
-    # Sets the start time for the babysitter:
+    # Sets the bed time for the babysitter/kids:
     #   
     #
     #
@@ -163,7 +179,7 @@ class Babysitter:
         return False
 
     ##
-    # Sets the start time for the babysitter:
+    # Calculates the amount to charge for the babysitting:
     #   
     #
     #
