@@ -72,7 +72,7 @@ class Babysitter:
                 return returnInfo
             else:
                 hour = int(hour)
-                if ending == 'PM':
+                if ending == 'PM' and hour != 12:
                     hour += 12
                 elif ending == 'AM' and hour == 12:
                     hour = 0
@@ -96,7 +96,7 @@ class Babysitter:
                 return returnInfo
             else:
                 hour = int(hour)
-                if ending == 'PM':
+                if ending == 'PM' and hour != 12:
                     hour += 12
                 elif ending == 'AM' and hour == 12:
                     hour = 0
@@ -133,16 +133,22 @@ class Babysitter:
     def set_start(self, new_start_time):
         time = self.convert_time(new_start_time)
         if time['error'] != None:
-            return time['error']
+            # setting the attribute to the error it got so it will pass it through to
+            # the output
+            self.start = time['error']
+            return self.start
         
         else:
             if (6 >= time['hour'] >= 4):
-                return string_constants.INVALID_START_TIME_ERROR
+                self.start = string_constants.INVALID_START_TIME_ERROR
+                return self.start
 
             elif time['minutes'] != None and time['minutes'] > 0:
                 self.start = time['hour'] + 1
                 print(string_constants.MINUTES_AFTER_WARNING)
 
+            elif 17 >= time['hour'] >= 5:
+                self.start = 17
             else:
                 self.start = time['hour']
             
@@ -165,18 +171,22 @@ class Babysitter:
     def set_finish(self, new_finish_time):
         time = self.convert_time(new_finish_time)
         if time['error'] != None:
-            return time['error']
+            self.finish = time['error']
+            return self.finish
         
         else:
             if (16 >= time['hour'] >= 5):
-                return string_constants.FINISH_TIME_AFTER_FIVE_AM_ERROR
+                self.finish = string_constants.FINISH_TIME_AFTER_FIVE_AM_ERROR
+                return self.finish
 
             elif time['minutes'] != None and time['minutes'] > 0:
                 temp_finish = time['hour'] - 1
                 if temp_finish >= 17 and self.start >= 16 and self.start > temp_finish:
-                    return string_constants.FINISH_TIME_BEFORE_START_ERROR
+                    self.finish = string_constants.FINISH_TIME_BEFORE_START_ERROR
+                    return self.finish
                 elif temp_finish <= 4 and self.start <= 4 and temp_finish < self.start:
-                    return string_constants.FINISH_TIME_BEFORE_START_ERROR
+                    self.finish = string_constants.FINISH_TIME_BEFORE_START_ERROR
+                    return self.finish
 
                 else:
                     self.finish = temp_finish
@@ -184,9 +194,11 @@ class Babysitter:
             
             else:
                 if time['hour'] >= 17 and self.start >= 16 and self.start > time['hour']:
-                    return string_constants.FINISH_TIME_BEFORE_START_ERROR
+                    self.finish = string_constants.FINISH_TIME_BEFORE_START_ERROR
+                    return self.finish
                 elif time['hour'] <= 4 and self.start <= 4 and time['hour'] < self.start:
-                    return string_constants.FINISH_TIME_BEFORE_START_ERROR
+                    self.finish = string_constants.FINISH_TIME_BEFORE_START_ERROR
+                    return self.finish
                 else:
                     self.finish = time['hour']
             
@@ -206,11 +218,13 @@ class Babysitter:
     def set_bed_time(self, new_bed_time):
         time = self.convert_time(new_bed_time)
         if time['error'] != None:
-            return time['error']
+            self.bed_time = time['error']
+            return self.bed_time
 
         else:
             if 17 >= time['hour'] >= 2:
-                return string_constants.INVALID_BED_TIME_ERROR
+                self.bed_time = string_constants.INVALID_BED_TIME_ERROR
+                return self.bed_time
             else:
                 self.bed_time = time['hour']
 
@@ -226,14 +240,17 @@ class Babysitter:
     #   
     ##
     def calculate_nightly_charge(self):
-        if self.start == None:
-            return string_constants.NO_START_TIME_SET_ERROR
+
+        # This is set up this way because the error is set to the attribute 
+        # and there are initiated errors vs non initiated errors this would catch
+        if type(self.start) != int:
+            return [string_constants.NO_START_TIME_SET_ERROR, self.start]
         
-        elif self.finish == None:
-            return string_constants.NO_START_TIME_SET_ERROR
+        elif type(self.finish) != int:
+            return [string_constants.NO_FINISH_TIME_SET_ERROR, self.finish]
         
-        elif self.bed_time == None:
-            return string_constants.NO_START_TIME_SET_ERROR
+        elif type(self.bed_time) != int:
+            return [string_constants.NO_BED_TIME_SET_ERROR, self.bed_time]
 
         else:
             firstRateHours = 0

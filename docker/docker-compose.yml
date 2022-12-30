@@ -1,0 +1,8 @@
+# docker-compose.yml
+
+version: '3.3'    
+services:
+  babysitter-service:
+    build:
+      context: ../
+      dockerfile: ../northwoods/docker/Dockerfile

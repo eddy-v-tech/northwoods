@@ -67,7 +67,7 @@ def test_valid_start_time():
 
     # Test a 4PM start time (should auto set to 17 since that is the earliest start)
     assert testSitter.set_start("4PM") == string_constants.SUCCESS_STRING
-    assert testSitter.start == 16
+    assert testSitter.start == 17
 
     # Test a 6:30 start time to test that fractional times don't count (should be 19)
     assert testSitter.set_start("6:30PM") == string_constants.SUCCESS_STRING
@@ -120,15 +120,15 @@ def test_invalid_calculation_scenario():
 
     # Test undefined start time is handled
     testSitter.start = None
-    assert testSitter.calculate_nightly_charge() == string_constants.NO_START_TIME_SET_ERROR
+    assert testSitter.calculate_nightly_charge()[0] == string_constants.NO_START_TIME_SET_ERROR
 
     # Test undefined finish time is handled
     testSitter.finish = None
-    assert testSitter.calculate_nightly_charge() == string_constants.NO_START_TIME_SET_ERROR
+    assert testSitter.calculate_nightly_charge()[0] == string_constants.NO_START_TIME_SET_ERROR
 
     # Test undefined bed time is handled
     testSitter.bed_time = None
-    assert testSitter.calculate_nightly_charge() == string_constants.NO_START_TIME_SET_ERROR
+    assert testSitter.calculate_nightly_charge()[0] == string_constants.NO_START_TIME_SET_ERROR
 
 
 def test_calculation():
@@ -169,3 +169,8 @@ def test_edge_case():
     testSitter.set_start("12AM")
     testSitter.set_finish("12AM")
     assert testSitter.calculate_nightly_charge() == 0
+
+    #Start time at noon 5*12+8*2 = 76
+    testSitter.set_start("12PM")
+    testSitter.set_finish("12AM")
+    assert testSitter.calculate_nightly_charge() == 76
